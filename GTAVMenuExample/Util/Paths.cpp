@@ -1,6 +1,9 @@
 #include "Paths.h"
 
 static HMODULE ourModule;
+static std::string moduleFolder;
+static std::string moduleName;
+static std::string moduleNameWithoutExt;
 
 const std::string Paths::GetRunningExecutableFolder() {
 
@@ -74,4 +77,26 @@ void Paths::SetOurModuleHandle(const HMODULE module) {
 const HMODULE Paths::GetOurModuleHandle() {
 
 	return ourModule;
+}
+
+void Paths::SetModuleInfo(std::string folder, std::string name) {
+	moduleFolder = folder;
+	moduleName = name;
+	size_t lastIndex = moduleName.find_last_of(".");
+	if (lastIndex == -1) {
+		moduleNameWithoutExt = moduleName;
+	}
+	else {
+		moduleNameWithoutExt = moduleName.substr(0, lastIndex);
+	}
+}
+
+const std::string Paths::GetModuleFolder() {
+	return moduleFolder;
+}
+const std::string Paths::GetModuleName() {
+	return moduleName;
+}
+const std::string Paths::GetModuleNameWithoutExtension() {
+	return moduleNameWithoutExt;
 }

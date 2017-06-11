@@ -18,6 +18,7 @@ BOOL APIENTRY DllMain(HMODULE hInstance, DWORD reason, LPVOID lpReserved)
 		"\\" + Paths::GetModuleNameWithoutExtension(hInstance) + ".log";
 	logger.SetFile(logFile);
 	Paths::SetOurModuleHandle(hInstance);
+	Paths::SetModuleInfo(Paths::GetModuleFolder(hInstance), Paths::GetModuleName(hInstance));
 	switch (reason)
 	{
 		case DLL_PROCESS_ATTACH:
