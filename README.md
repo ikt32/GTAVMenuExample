@@ -8,7 +8,6 @@ Example script of how to use [GTAVMenuBase](https://github.com/E66666666/GTAVMen
 ### Requirements
 * [ScriptHookV SDK by Alexander Blade](http://www.dev-c.com/gtav/scripthookv/)
 * [GTAVMenuBase](https://github.com/E66666666/GTAVMenuBase)
-* [simpleini (included as git submodule)](https://github.com/brofield/simpleini/)
 
 Download the [ScriptHookV SDK](http://www.dev-c.com/gtav/scripthookv/) and extract its contents to ScriptHookV_SDK.
 
