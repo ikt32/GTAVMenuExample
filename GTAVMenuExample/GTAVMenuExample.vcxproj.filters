@@ -4,7 +4,6 @@
     <ClCompile Include="script.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="keyboard.cpp" />
-    <ClCompile Include="settings.cpp" />
     <ClCompile Include="Util\Util.cpp">
       <Filter>Util</Filter>
     </ClCompile>
@@ -23,6 +22,12 @@
     <ClCompile Include="..\..\GTAVMenuBase\menukeyboard.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\GTAVMenuBase\menuutils.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp">
+      <Filter>Menu</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="script.h" />
@@ -39,7 +44,6 @@
       <Filter>SDK</Filter>
     </ClInclude>
     <ClInclude Include="keyboard.h" />
-    <ClInclude Include="settings.h" />
     <ClInclude Include="Util\Util.hpp">
       <Filter>Util</Filter>
     </ClInclude>
@@ -59,6 +63,12 @@
       <Filter>Menu</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GTAVMenuBase\menukeyboard.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GTAVMenuBase\menuutils.h">
+      <Filter>Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GTAVMenuBase\menusettings.h">
       <Filter>Menu</Filter>
     </ClInclude>
   </ItemGroup>
