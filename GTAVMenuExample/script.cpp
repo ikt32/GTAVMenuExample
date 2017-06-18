@@ -29,6 +29,8 @@ int intStep = 1;
 int stringsPos = 0;
 int stepChoice = 0;
 
+int numberOfOptions = 16;
+
 // Choice of step size to demonstrate variable precision display
 std::vector<float> floatSteps = {	
 	1.0f,
@@ -66,6 +68,7 @@ void init() {
  */
 void onMain() {
 	logger.Write("Menu was opened");
+	menu.ReadSettings();
 }
 
 /*
@@ -104,6 +107,7 @@ void update_menu() {
 	if (menu.CurrentMenu("mainmenu")) {
 		// The title is NOT optional.
 		menu.Title("Menu example");
+		menu.Subtitle("C++ menu showcase");
 
 		// This is a normal option. It'll return true when "select" is presed.
 		if (menu.Option("Click me!", { "This will log something to " + Paths::GetModuleNameWithoutExtension() + ".log" })) {
@@ -113,6 +117,7 @@ void update_menu() {
 
 		// This will open a submenu with the name "submenu"
 		menu.MenuOption("Look, a submenu!", "submenu", { "This submenu demonstrates a few settings."});
+		menu.MenuOption("Variable size demo", "varmenu", {"This submenu demonstrates how items can be added or removed dynamically."});
 
 		// Showing static information is also possible if a string vector only contains one element.
 		int nothing = 0;
@@ -124,6 +129,7 @@ void update_menu() {
 	// the name used to call them.
 	if (menu.CurrentMenu("submenu")) {
 		menu.Title("I'm a submenu!");
+		menu.Subtitle("Yay!");
 
 		menu.BoolOption("Here's a checkbox", checkBoxStatus, { std::string("Boolean is ") + (checkBoxStatus ? "checked" : "not checked") + "." });
 		menu.IntOption("Ints!", someInt, -100, 100, intStep, { "Stepsize can be changed!" });
@@ -149,6 +155,18 @@ void update_menu() {
 		};
 		menu.OptionPlus("Look to the right!", extraInfo, std::bind(onLeft), std::bind(onRight), "Something", 
 		{"You do need to manage the line splitting yourself, as it's meant for short pieces of info."});
+	}
+
+	if (menu.CurrentMenu("varmenu")) {
+		menu.Title("Variable items");
+		menu.Subtitle("Whoa!");
+
+		menu.IntOption("Options #", numberOfOptions, 1, 999, 1, {"Increase or decrease the amount of items."});
+
+		for (int i = 0; i < numberOfOptions; i++) {
+			int display = i + 1;
+			menu.IntOption("Option number", display, display, display, 0);
+		}
 	}
 
 	// Finally, draw all textures.
