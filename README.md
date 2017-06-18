@@ -2,6 +2,7 @@
 
 Example script of how to use [GTAVMenuBase](https://github.com/E66666666/GTAVMenuBase).
 
+![Comparison](MenuCompare.png)
 
 ## Building
 
