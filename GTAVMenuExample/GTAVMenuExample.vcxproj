@@ -138,7 +138,7 @@
       <WarningLevel>Level3</WarningLevel>
     </ClCompile>
     <Link>
-      <AdditionalOptions>..\..\ScriptHookV_SDK\lib\ScriptHookV.lib %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions>..\..\ScriptHookV_SDK\lib\ScriptHookV.lib ..\..\GTAVMenuBase\lib\NativeMenu.lib %(AdditionalOptions)</AdditionalOptions>
       <GenerateDebugInformation>No</GenerateDebugInformation>
       <SubSystem>Windows</SubSystem>
       <OptimizeReferences>true</OptimizeReferences>
@@ -149,11 +149,6 @@
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\GTAVMenuBase\menu.cpp" />
-    <ClCompile Include="..\..\GTAVMenuBase\menucontrols.cpp" />
-    <ClCompile Include="..\..\GTAVMenuBase\menukeyboard.cpp" />
-    <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp" />
-    <ClCompile Include="..\..\GTAVMenuBase\menuutils.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="script.cpp" />
