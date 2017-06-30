@@ -44,14 +44,11 @@ std::vector<float> floatSteps = {
 
 // Random words to go through in the menu
 std::vector<std::string> strings = {
-	"Here",
-	"are",
-	"a",
-	"few",
-	"words",
-	"to",
-	"choose",
-	"from",
+	"Hello",
+	"world!",
+	"This",
+	"ain't",
+	"NativeUI",
 };
 
 /*
@@ -106,7 +103,7 @@ void update_menu() {
 	 */ 
 	if (menu.CurrentMenu("mainmenu")) {
 		// The title is NOT optional.
-		menu.Title("Menu example");
+		menu.Title("NativeMenu");
 		menu.Subtitle("C++ menu showcase");
 
 		// This is a normal option. It'll return true when "select" is presed.
@@ -118,7 +115,7 @@ void update_menu() {
 		// This will open a submenu with the name "submenu"
 		menu.MenuOption("Look, a submenu!", "submenu", { "This submenu demonstrates a few settings."});
 		menu.MenuOption("Variable size demo", "varmenu", {"This submenu demonstrates how items can be added or removed dynamically."});
-
+		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Wanna see how the menu looks like without subtitle?" });
 		// Showing static information is also possible if a string vector only contains one element.
 		int nothing = 0;
 		menu.StringArray("Version", { DISPLAY_VERSION }, nothing, 
@@ -154,7 +151,7 @@ void update_menu() {
 			"The box expands by itself"
 		};
 		menu.OptionPlus("Look to the right!", extraInfo, std::bind(onLeft), std::bind(onRight), "Something", 
-		{"You do need to manage the line splitting yourself, as it's meant for short pieces of info."});
+		{"You do need to manage the line splitting yourself, as it was intended for short pieces of info."});
 	}
 
 	if (menu.CurrentMenu("varmenu")) {
@@ -165,8 +162,19 @@ void update_menu() {
 
 		for (int i = 0; i < numberOfOptions; i++) {
 			int display = i + 1;
-			menu.IntOption("Option number", display, display, display, 0);
+			menu.IntOption("Option number", display, display, display, 0, { "This option was automatically generated." });
 		}
+	}
+
+	if (menu.CurrentMenu("nosubtitlemenu")) {
+		menu.Title("No subtitle?");
+		menu.Option("Normal option");
+		std::vector<std::string> nope = {
+			"Here",
+			"are",
+			"words"
+		};
+		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, "See?", { "See, it also disappears here." });
 	}
 
 	// Finally, draw all textures.
