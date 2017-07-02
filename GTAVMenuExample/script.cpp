@@ -15,6 +15,8 @@
 #include "Util/Logger.hpp"
 #include "Util/Versions.h"
 
+int textureBgId;
+
 NativeMenu::Menu menu;
 std::string settingsMenuFile;
 
@@ -115,7 +117,7 @@ void update_menu() {
 		// This will open a submenu with the name "submenu"
 		menu.MenuOption("Look, a submenu!", "submenu", { "This submenu demonstrates a few settings."});
 		menu.MenuOption("Variable size demo", "varmenu", {"This submenu demonstrates how items can be added or removed dynamically."});
-		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Wanna see how the menu looks like without subtitle?" });
+		menu.MenuOption("Title demo", "titlemenu", { "Showcase different title drawing options." });
 		// Showing static information is also possible if a string vector only contains one element.
 		int nothing = 0;
 		menu.StringArray("Version", { DISPLAY_VERSION }, nothing, 
@@ -166,6 +168,30 @@ void update_menu() {
 		}
 	}
 
+	if (menu.CurrentMenu("titlemenu")) {
+		menu.Title("Title showcase");
+		menu.Subtitle("MORE TITLES");
+
+		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Wanna see how the menu looks like without subtitle?" });
+		menu.MenuOption("Los Santos Customs background", "title_lscmenu");
+		menu.MenuOption("custom PNG background", "title_pngmenu");
+	}
+
+	if (menu.CurrentMenu("title_lscmenu")) {
+		menu.Title("", "shopui_title_carmod", "shopui_title_carmod");
+		menu.Subtitle("Fwoop");
+
+		menu.Option("Dummy option");
+	}
+
+	if (menu.CurrentMenu("title_pngmenu")) {
+		menu.Title("", textureBgId);
+		menu.Subtitle("Custom title background!");
+
+		menu.Option("Dummy option");
+	}
+
+
 	if (menu.CurrentMenu("nosubtitlemenu")) {
 		menu.Title("No subtitle?");
 		menu.Option("Normal option");
@@ -176,6 +202,8 @@ void update_menu() {
 		};
 		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, "See?", { "See, it also disappears here." });
 	}
+
+
 
 	// Finally, draw all textures.
 	menu.EndMenu();
@@ -200,14 +228,30 @@ void update_game() {
 	/* Whatever happens normally in your script! */
 }
 
+inline bool exists(const std::string& name) {
+	struct stat buffer;
+	return (stat(name.c_str(), &buffer) == 0);
+}
+
 void main() {
 	logger.Write("Script started");
 
+	// Check the paths on runtime, though this could also be hardcoded with a relative path.
 	settingsMenuFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\settings_menu.ini";
 	menu.SetFiles(settingsMenuFile);
 
 	logger.Write("Loading " + settingsMenuFile);
 
+	// Create the custom background texture. It's required to manually check if the file exists, otherwise ScriptHookV crashes!
+	std::string textureBgFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\custom_background.png";
+	if (exists(textureBgFile)) {
+		textureBgId = createTexture(textureBgFile.c_str());
+	}
+	else {
+		logger.Write("ERROR: " + textureBgFile + " does not exist.");
+	}
+
+	// Register callbacks for menu entry and exit.
 	menu.RegisterOnMain(std::bind(onMain));
 	menu.RegisterOnExit(std::bind(onExit));
 
