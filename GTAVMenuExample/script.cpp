@@ -173,8 +173,11 @@ void update_menu() {
 		menu.Subtitle("MORE TITLES");
 
 		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Wanna see how the menu looks like without subtitle?" });
-		menu.MenuOption("Los Santos Customs background", "title_lscmenu");
-		menu.MenuOption("custom PNG background", "title_pngmenu");
+		menu.MenuOption("Los Santos Customs background", "title_lscmenu", { "Internal sprites as background." });
+		menu.MenuOption("Custom background", "title_pngmenu", { "External textures as background." });
+		menu.MenuOption("Long title text", "longtitlemenu",
+		{ "Title too long? We'll fix it! Resizes and splits lines. Guaranteed fittage for anything up to 2 lines of text. "
+			"Want longer? You probably shouldn't put entire poems in there ;)" });
 	}
 
 	if (menu.CurrentMenu("title_lscmenu")) {
@@ -185,7 +188,7 @@ void update_menu() {
 	}
 
 	if (menu.CurrentMenu("title_pngmenu")) {
-		menu.Title("", textureBgId);
+		menu.Title("/animus/", textureBgId);
 		menu.Subtitle("Custom title background!");
 
 		menu.Option("Dummy option");
@@ -201,6 +204,12 @@ void update_menu() {
 			"words"
 		};
 		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, "See?", { "See, it also disappears here." });
+	}
+
+	if (menu.CurrentMenu("longtitlemenu")) {
+		menu.Title("Further Adventures in Finance and Felony");
+		menu.Subtitle("Limited Title Splitting");
+		menu.Option("Dummy option");
 	}
 
 
