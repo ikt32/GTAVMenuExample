@@ -40,3 +40,5 @@ public:
 private:
 	char* m_s;
 };
+
+bool GetPNGDimensions(std::string file, int *width, int *height);

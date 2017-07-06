@@ -1,8 +1,13 @@
 /*
  * This file is an example implementation of the menu system.
  */
-
 #include "script.h"
+
+// This include works from C++17 onwards, which is for filesystem access.
+// I use it for demoing images, so if you use boost or some other way to
+// explore folders, no need for this.
+#include <experimental/filesystem>
+namespace fs = std::experimental::filesystem;
 
 // You'll only need to include <menu.h> to start using it,
 // after setting paths up properly.
@@ -16,6 +21,8 @@
 #include "Util/Versions.h"
 
 int textureBgId;
+// filename, handle, width, height
+std::vector<std::tuple<std::string, int, int, int>> textureHandles;
 
 NativeMenu::Menu menu;
 std::string settingsMenuFile;
@@ -68,6 +75,20 @@ void init() {
 void onMain() {
 	logger.Write("Menu was opened");
 	menu.ReadSettings();
+	textureHandles.clear();
+	std::string imgPath = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img";
+	for (auto &file : fs::directory_iterator(imgPath)) {
+		int width;
+		int height;
+		std::stringstream fileName;
+		fileName << file;
+		if (!GetPNGDimensions(fileName.str(), &width, &height))
+			continue;
+
+		int handle = createTexture(fileName.str().c_str());
+
+		textureHandles.push_back(std::make_tuple(fileName.str(), handle, width, height));
+	}
 }
 
 /*
@@ -118,6 +139,8 @@ void update_menu() {
 		menu.MenuOption("Look, a submenu!", "submenu", { "This submenu demonstrates a few settings."});
 		menu.MenuOption("Variable size demo", "varmenu", {"This submenu demonstrates how items can be added or removed dynamically."});
 		menu.MenuOption("Title demo", "titlemenu", { "Showcase different title drawing options." });
+		menu.MenuOption("Image demo", "imagemenu", { "Load images from a folder and show 'em all." });
+
 		// Showing static information is also possible if a string vector only contains one element.
 		int nothing = 0;
 		menu.StringArray("Version", { DISPLAY_VERSION }, nothing, 
@@ -188,7 +211,7 @@ void update_menu() {
 	}
 
 	if (menu.CurrentMenu("title_pngmenu")) {
-		menu.Title("/animus/", textureBgId);
+		menu.Title("", textureBgId);
 		menu.Subtitle("Custom title background!");
 
 		menu.Option("Dummy option");
@@ -212,7 +235,22 @@ void update_menu() {
 		menu.Option("Dummy option");
 	}
 
+	if (menu.CurrentMenu("imagemenu")) {
+		menu.Title("Images");
+		menu.Subtitle("Image showcase");
 
+		for (auto handle : textureHandles) {
+			fs::path p(std::get<0>(handle));
+
+			std::vector<std::string> extras;
+			//extras.push_back("Even mixes with text!");
+			extras.push_back(menu.ImagePrefix + std::to_string(std::get<1>(handle)) + 
+							 "W" + std::to_string(std::get<2>(handle)) +
+							 "H" + std::to_string(std::get<3>(handle)));
+			extras.push_back(p.filename().string());
+			menu.OptionPlus(p.filename().string(), extras, nullptr, nullptr, "Image");
+		}
+	}
 
 	// Finally, draw all textures.
 	menu.EndMenu();
@@ -248,11 +286,10 @@ void main() {
 	// Check the paths on runtime, though this could also be hardcoded with a relative path.
 	settingsMenuFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\settings_menu.ini";
 	menu.SetFiles(settingsMenuFile);
-
 	logger.Write("Loading " + settingsMenuFile);
 
 	// Create the custom background texture. It's required to manually check if the file exists, otherwise ScriptHookV crashes!
-	std::string textureBgFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\custom_background.png";
+	std::string textureBgFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img\\custom_background.png";
 	if (exists(textureBgFile)) {
 		textureBgId = createTexture(textureBgFile.c_str());
 	}
