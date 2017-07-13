@@ -82,7 +82,7 @@ void onMain() {
 		int height;
 		std::stringstream fileName;
 		fileName << file;
-		if (!GetPNGDimensions(fileName.str(), &width, &height))
+		if (!GetIMGDimensions(fileName.str(), &width, &height))
 			continue;
 
 		int handle = createTexture(fileName.str().c_str());
@@ -241,9 +241,7 @@ void update_menu() {
 
 		for (auto handle : textureHandles) {
 			fs::path p(std::get<0>(handle));
-
 			std::vector<std::string> extras;
-			//extras.push_back("Even mixes with text!");
 			extras.push_back(menu.ImagePrefix + std::to_string(std::get<1>(handle)) + 
 							 "W" + std::to_string(std::get<2>(handle)) +
 							 "H" + std::to_string(std::get<3>(handle)));

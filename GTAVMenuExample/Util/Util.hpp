@@ -41,4 +41,7 @@ private:
 	char* m_s;
 };
 
+bool GetIMGDimensions(std::string file, int *width, int *height);
+
 bool GetPNGDimensions(std::string file, int *width, int *height);
+bool GetJPGDimensions(std::string file, int *width, int *height);
