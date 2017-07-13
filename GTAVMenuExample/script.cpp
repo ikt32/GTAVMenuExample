@@ -21,6 +21,7 @@ namespace fs = std::experimental::filesystem;
 #include "Util/Versions.h"
 
 int textureBgId;
+int textureBgId2;
 // filename, handle, width, height
 std::vector<std::tuple<std::string, int, int, int>> textureHandles;
 
@@ -195,38 +196,42 @@ void update_menu() {
 		menu.Title("Title showcase");
 		menu.Subtitle("MORE TITLES");
 
-		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Wanna see how the menu looks like without subtitle?" });
+		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Demo \"OptionPlus\" if no subtitle is assigned." });
 		menu.MenuOption("Los Santos Customs background", "title_lscmenu", { "Internal sprites as background." });
 		menu.MenuOption("Custom background", "title_pngmenu", { "External textures as background." });
+		menu.MenuOption("Custom background 2", "title_pngmenu2", { "External textures as background. Colored footer." });
+
 		menu.MenuOption("Long title text", "longtitlemenu",
 		{ "Title too long? We'll fix it! Resizes and splits lines. Guaranteed fittage for anything up to 2 lines of text. "
 			"Want longer? You probably shouldn't put entire poems in there ;)" });
 	}
 
-	if (menu.CurrentMenu("title_lscmenu")) {
-		menu.Title("", "shopui_title_carmod", "shopui_title_carmod");
-		menu.Subtitle("Fwoop");
+	if (menu.CurrentMenu("nosubtitlemenu")) {
+		menu.Title("No subtitle");
+		std::vector<std::string> nope = {
+			"No subtitle bar here."
+		};
+		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, "Info", { "It also disappears in OptionPlus." });
+		menu.Footer("commonmenu", "interaction_bgd");
+	}
 
+	if (menu.CurrentMenu("title_lscmenu")) {
+		menu.Title("Hi!", "shopui_title_carmod", "shopui_title_carmod");
+		menu.Subtitle("Sprite background");
 		menu.Option("Dummy option");
 	}
 
 	if (menu.CurrentMenu("title_pngmenu")) {
 		menu.Title("", textureBgId);
-		menu.Subtitle("Custom title background!");
-
+		menu.Subtitle("Custom background");
 		menu.Option("Dummy option");
 	}
 
-
-	if (menu.CurrentMenu("nosubtitlemenu")) {
-		menu.Title("No subtitle?");
-		menu.Option("Normal option");
-		std::vector<std::string> nope = {
-			"Here",
-			"are",
-			"words"
-		};
-		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, "See?", { "See, it also disappears here." });
+	if (menu.CurrentMenu("title_pngmenu2")) {
+		menu.Title("", textureBgId2);
+		menu.Subtitle("Custom background");
+		menu.Option("Dummy option");
+		menu.Footer({173, 236, 173, 255});
 	}
 
 	if (menu.CurrentMenu("longtitlemenu")) {
@@ -293,6 +298,13 @@ void main() {
 	}
 	else {
 		logger.Write("ERROR: " + textureBgFile + " does not exist.");
+	}
+	std::string textureBg2File = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img\\custom_background2.png";
+	if (exists(textureBg2File)) {
+		textureBgId2 = createTexture(textureBg2File.c_str());
+	}
+	else {
+		logger.Write("ERROR: " + textureBg2File + " does not exist.");
 	}
 
 	// Register callbacks for menu entry and exit.
