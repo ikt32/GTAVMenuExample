@@ -176,7 +176,7 @@ void update_menu() {
 			"Each string is a new line",
 			"The box expands by itself"
 		};
-		menu.OptionPlus("Look to the right!", extraInfo, std::bind(onLeft), std::bind(onRight), "Something", 
+		menu.OptionPlus("Look to the right!", extraInfo, nullptr, std::bind(onLeft), std::bind(onRight), "Something", 
 		{"You do need to manage the line splitting yourself, as it was intended for short pieces of info."});
 	}
 
@@ -211,7 +211,7 @@ void update_menu() {
 		std::vector<std::string> nope = {
 			"No subtitle bar here."
 		};
-		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, "Info", { "It also disappears in OptionPlus." });
+		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, nullptr, "Info", { "It also disappears in OptionPlus." });
 		menu.Footer("commonmenu", "interaction_bgd");
 	}
 
@@ -251,7 +251,7 @@ void update_menu() {
 							 "W" + std::to_string(std::get<2>(handle)) +
 							 "H" + std::to_string(std::get<3>(handle)));
 			extras.push_back(p.filename().string());
-			menu.OptionPlus(p.filename().string(), extras, nullptr, nullptr, "Image");
+			menu.OptionPlus(p.filename().string(), extras, nullptr, nullptr, nullptr, "Image");
 		}
 	}
 
