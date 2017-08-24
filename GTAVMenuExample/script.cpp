@@ -55,6 +55,7 @@ int stringsPos = 0;
 int stepChoice = 0;
 
 int numberOfOptions = 16;
+int prevNotification;
 
 // Choice of step size to demonstrate variable precision display
 std::vector<float> floatSteps = {	
@@ -69,11 +70,8 @@ std::vector<float> floatSteps = {
 
 // Random words to go through in the menu
 std::vector<std::string> strings = {
-	"Hello",
+	"Hello, ",
 	"world!",
-	"This",
-	"ain't",
-	"NativeUI",
 };
 
 /*
@@ -124,15 +122,12 @@ void scanImageFolder() {
 */
 void init() {
 	menu.ReadSettings();
-	logger.Write("Settings read");
-	logger.Write("Initialization finished");
 }
 
 /*
  * This simple function is executed when the menu opens.
  */
 void onMain() {
-	logger.Write("Menu was opened");
 	menu.ReadSettings();
 	scanImageFolder();
 }
@@ -141,18 +136,18 @@ void onMain() {
  * This simple function is executed when the menu closes.
  */
 void onExit() {
-	logger.Write("Menu was closed");
+	showNotification("Menu was closed", &prevNotification);
 }
 
 /*
  * We'll attach these functions in an OptionPlus method.
  */
 void onRight() {
-	showNotification("You pressed RIGHT on an OptionPlus");
+	showNotification("You pressed RIGHT on an OptionPlus", &prevNotification);
 }
 
 void onLeft() {
-	showNotification("You pressed LEFT on an OptionPlus");
+	showNotification("You pressed LEFT on an OptionPlus", &prevNotification);
 }
 
 /*
@@ -172,20 +167,20 @@ void update_menu() {
 	 */ 
 	if (menu.CurrentMenu("mainmenu")) {
 		// The title is NOT optional.
-		menu.Title("NativeMenu");
-		menu.Subtitle("C++ menu showcase");
+		menu.Title("Menu Example");
+		menu.Subtitle("~r~C++ ~b~MENU SHOWCASE");
 
 		// This is a normal option. It'll return true when "select" is presed.
 		if (menu.Option("Click me!", { "This will log something to " + Paths::GetModuleNameWithoutExtension() + ".log" })) {
-			showNotification("Check the logfile!");
+			showNotification("Check the logfile!", &prevNotification);
 			logger.Write("\"Click me!\" was selected!");
 		}
 
 		// This will open a submenu with the name "submenu"
-		menu.MenuOption("Look, a submenu!", "submenu", { "This submenu demonstrates a few settings."});
+		menu.MenuOption("Option demos", "submenu", { "This submenu demonstrates usage of some options."});
 		menu.MenuOption("Variable size demo", "varmenu", {"This submenu demonstrates how items can be added or removed dynamically."});
 		menu.MenuOption("Title demo", "titlemenu", { "Showcase different title drawing options." });
-		menu.MenuOption("Image demo", "imagemenu", { "Load images from a folder and show 'em all." });
+		menu.MenuOption("Image demo", "imagemenu", { "Showcase OptionPlus image arguments" });
 
 		// Showing static information is also possible if a string vector only contains one element.
 		int nothing = 0;
@@ -196,19 +191,19 @@ void update_menu() {
 	// Any submenus can have any titles. They should only need to match
 	// the name used to call them.
 	if (menu.CurrentMenu("submenu")) {
-		menu.Title("I'm a submenu!");
-		menu.Subtitle("Yay!");
+		menu.Title("Option demos");
+		menu.Subtitle("");
 
-		menu.BoolOption("Here's a checkbox", checkBoxStatus, { std::string("Boolean is ") + (checkBoxStatus ? "checked" : "not checked") + "." });
-		menu.IntOption("Ints!", someInt, -100, 100, intStep, { "Stepsize can be changed!" });
-		menu.IntOption("Int step size", intStep, 1, 100, 1, { "Stepsize can be changed!" });
-		menu.FloatOption("Floats?", someFloat, -100.0f, 100.0f, floatSteps[stepChoice], { "Try holding left/right, things should speed up." });
-		menu.FloatArray("Float step size", floatSteps, stepChoice, { "Something something magic!" });
-		menu.StringArray("String arrays", strings, stringsPos, { "You can also show different strings" });
+		menu.BoolOption("BoolOption", checkBoxStatus, { std::string("Boolean is ") + (checkBoxStatus ? "checked" : "not checked") + "." });
+		menu.IntOption("IntOption step size", intStep, 1, 100, 1, { "Change the step size for IntOption below" });
+		menu.IntOption("IntOption", someInt, -100, 100, intStep, { "Stepsize: " + std::to_string(intStep) });
+		menu.FloatArray("FloatOption step size", floatSteps, stepChoice, { "Change the step size for FloatOption below.",
+																		   "Note: this option uses FloatArray."});
+		menu.FloatOption("FloatOption", someFloat, -100.0f, 100.0f, floatSteps[stepChoice], { "Try holding left/right, things should speed up." });
+		menu.StringArray("StringArray", strings, stringsPos, { "You can also show different strings" });
 
-		menu.Option("Description info",
-		{ "You can put arbitarily long texts in the description. "
-		  "Word wrapping magic should work! ",
+		menu.Option("Option/Details",
+		{ "You can put arbitarily long texts in the details. Word wrapping happens automatically.",
 		  "Vector elements are newlines."});
 
 		// Some extra information can be shown on the right of the the menu.
@@ -216,16 +211,16 @@ void update_menu() {
 			"OptionPlus",
 			"This box supports images, in-game sprites and texts. "
 			"Longer texts can be used without problems, this box should split the lines "
-			"by itself. As with the details, a new vector element inserts a newline",
+			"by itself. As with the details, a new vector element inserts a newline.",
 			"See?"
 		};
-		menu.OptionPlus("Look to the right!", extraInfo, nullptr, std::bind(onLeft), std::bind(onRight), "OptionPlus",
+		menu.OptionPlus("OptionPlus", extraInfo, nullptr, std::bind(onRight), std::bind(onLeft), "OptionPlus",
 		{ "This box also manages string splitting for width." });
 	}
 
 	if (menu.CurrentMenu("varmenu")) {
-		menu.Title("Variable items");
-		menu.Subtitle("Whoa!");
+		menu.Title("Variable size");
+		menu.Subtitle("");
 
 		menu.IntOption("Options #", numberOfOptions, 1, 999, 1, {"Increase or decrease the amount of items."});
 
@@ -236,56 +231,55 @@ void update_menu() {
 	}
 
 	if (menu.CurrentMenu("titlemenu")) {
-		menu.Title("Title showcase");
-		menu.Subtitle("MORE TITLES");
+		menu.Title("Title demo");
+		menu.Subtitle("");
 
-		menu.MenuOption("No subtitle", "nosubtitlemenu", { "Demo \"OptionPlus\" if no subtitle is assigned." });
 		menu.MenuOption("Los Santos Customs background", "title_lscmenu", { "Internal sprites as background." });
 		menu.MenuOption("Custom background", "title_pngmenu", { "External textures as background." });
 		menu.MenuOption("Custom background 2", "title_pngmenu2", { "External textures as background. Colored footer." });
 
 		menu.MenuOption("Long title text", "longtitlemenu",
-		{ "Title too long? We'll fix it! Resizes and splits lines. Guaranteed fittage for anything up to 2 lines of text. "
-			"Want longer? You probably shouldn't put entire poems in there ;)" });
-	}
-
-	if (menu.CurrentMenu("nosubtitlemenu")) {
-		menu.Title("No subtitle");
-		std::vector<std::string> nope = {
-			"No subtitle bar here."
-		};
-		menu.OptionPlus("OptionPlus ->", nope, nullptr, nullptr, nullptr, "Info", { "It also disappears in OptionPlus." });
-		menu.Footer("commonmenu", "interaction_bgd");
+		{ "Automatically fit and resize long titles. Works for up to 2 lines of text (after processing)." });
 	}
 
 	if (menu.CurrentMenu("title_lscmenu")) {
-		menu.Title("Hi!", "shopui_title_carmod", "shopui_title_carmod");
+		menu.Title("", "shopui_title_carmod", "shopui_title_carmod");
 		menu.Subtitle("Sprite background");
-		menu.Option("Dummy option");
+		menu.Option("Option");
 	}
 
 	if (menu.CurrentMenu("title_pngmenu")) {
 		menu.Title("", textureBgId);
 		menu.Subtitle("Custom background");
-		menu.Option("Dummy option");
+		menu.Option("Option");
 	}
 
 	if (menu.CurrentMenu("title_pngmenu2")) {
 		menu.Title("", textureBgId2);
 		menu.Subtitle("Custom background");
-		menu.Option("Dummy option");
+		menu.Option("Option");
 		menu.Footer({173, 236, 173, 255});
 	}
 
 	if (menu.CurrentMenu("longtitlemenu")) {
 		menu.Title("Further Adventures in Finance and Felony");
-		menu.Subtitle("Limited Title Splitting");
-		menu.Option("Dummy option");
+		menu.Subtitle("Long title text");
+		menu.Option("Option");
 	}
 
 	if (menu.CurrentMenu("imagemenu")) {
 		menu.Title("Images");
-		menu.Subtitle("Image showcase");
+		menu.Subtitle("Image demo");
+
+		{
+			std::vector<std::string> extras;
+			extras.push_back(menu.SpritePrefix +
+				"dock_default" + " " +
+				"seashark" + " " +
+				"W" + std::to_string(512) +
+				"H" + std::to_string(256));
+			menu.OptionPlus("Game texture", extras, nullptr, nullptr, nullptr, "Sprite");
+		}
 
 		for (auto texture : g_textures) {
 			fs::path p(texture.Filename);
@@ -303,21 +297,6 @@ void update_menu() {
 }
 
 void update_game() {
-	player = PLAYER::PLAYER_ID();
-	playerPed = PLAYER::PLAYER_PED_ID();
-
-	// check if player ped exists and control is on (e.g. not in a cutscene)
-	if (!ENTITY::DOES_ENTITY_EXIST(playerPed) || !PLAYER::IS_PLAYER_CONTROL_ON(player)) {
-		menu.CloseMenu();
-		return;
-	}
-
-	// check for player ped death and player arrest
-	if (ENTITY::IS_ENTITY_DEAD(playerPed) || PLAYER::IS_PLAYER_BEING_ARRESTED(player, TRUE)) {
-		menu.CloseMenu();
-		return;
-	}
-
 	/* Whatever happens normally in your script! */
 }
 
