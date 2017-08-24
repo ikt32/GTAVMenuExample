@@ -22,8 +22,23 @@ namespace fs = std::experimental::filesystem;
 
 int textureBgId;
 int textureBgId2;
-// filename, handle, width, height
-std::vector<std::tuple<std::string, int, int, int>> textureHandles;
+
+class MenuTexture {
+public:
+	MenuTexture(): Handle(-1),
+	             Width(480),
+	             Height(270) { }
+
+	MenuTexture(std::string filename, int handle, int width, int height) :
+		    Filename(filename), Handle(handle), Width(width), Height(height) { }
+
+	std::string Filename;
+	int Handle;
+	int Width;
+	int Height;
+};
+
+std::vector<MenuTexture> g_textures;
 
 NativeMenu::Menu menu;
 std::string settingsMenuFile;
@@ -62,8 +77,51 @@ std::vector<std::string> strings = {
 };
 
 /*
- * The settings may be read multiple times if needed.
+ * Some utilities
  */
+bool isFileAdded(std::string filename, std::vector<MenuTexture> things) {
+	return std::find_if(things.begin(), things.end(), [&filename](const MenuTexture& element) { return element.Filename == filename; }) != things.end();
+}
+
+inline bool exists(const std::string& name) {
+	struct stat buffer;
+	return stat(name.c_str(), &buffer) == 0;
+}
+
+/*
+ * Only scan for added images.
+ */
+void scanImageFolder() {
+	std::string imgPath = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img";
+	for (auto &file : fs::directory_iterator(imgPath)) {
+		std::string fileName = fs::path(file).string();
+		if (isFileAdded(fileName, g_textures)) {
+			continue;
+		}
+		
+		int width;
+		int height;
+		if (!GetIMGDimensions(fileName, &width, &height))
+			continue;
+
+		int handle = createTexture(fileName.c_str());
+
+		g_textures.push_back(MenuTexture(fileName, handle, width, height));
+	}
+	std::vector<std::vector<MenuTexture>::iterator> thingsToErase;
+	for (auto texture : g_textures) {
+		if (!exists(texture.Filename)) {
+			thingsToErase.push_back(std::find_if(g_textures.begin(), g_textures.end(), [&texture](const MenuTexture& element) { return element.Filename == texture.Filename; }));
+		}
+	}
+	for (auto eraseMe : thingsToErase) {
+		g_textures.erase(eraseMe);
+	}
+}
+
+/*
+* The settings may be read multiple times if needed.
+*/
 void init() {
 	menu.ReadSettings();
 	logger.Write("Settings read");
@@ -76,20 +134,7 @@ void init() {
 void onMain() {
 	logger.Write("Menu was opened");
 	menu.ReadSettings();
-	textureHandles.clear();
-	std::string imgPath = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img";
-	for (auto &file : fs::directory_iterator(imgPath)) {
-		int width;
-		int height;
-		std::stringstream fileName;
-		fileName << file;
-		if (!GetIMGDimensions(fileName.str(), &width, &height))
-			continue;
-
-		int handle = createTexture(fileName.str().c_str());
-
-		textureHandles.push_back(std::make_tuple(fileName.str(), handle, width, height));
-	}
+	scanImageFolder();
 }
 
 /*
@@ -163,21 +208,19 @@ void update_menu() {
 
 		menu.Option("Description info",
 		{ "You can put arbitarily long texts in the description. "
-		"Word wrapping magic should work! "
-		"That's why this subtext is so big ;)",
-		"Newlines",
-		"like so."});
+		  "Word wrapping magic should work! ",
+		  "Vector elements are newlines."});
 
 		// Some extra information can be shown on the right of the the menu.
-		// You do need to manage newlines yourself.
 		std::vector<std::string> extraInfo = {
-			"There's also some additional info",
-			"You can put descriptions or info here",
-			"Each string is a new line",
-			"The box expands by itself"
+			"OptionPlus",
+			"This box supports images, in-game sprites and texts. "
+			"Longer texts can be used without problems, this box should split the lines "
+			"by itself. As with the details, a new vector element inserts a newline",
+			"See?"
 		};
-		menu.OptionPlus("Look to the right!", extraInfo, nullptr, std::bind(onLeft), std::bind(onRight), "Something", 
-		{"You do need to manage the line splitting yourself, as it was intended for short pieces of info."});
+		menu.OptionPlus("Look to the right!", extraInfo, nullptr, std::bind(onLeft), std::bind(onRight), "OptionPlus",
+		{ "This box also manages string splitting for width." });
 	}
 
 	if (menu.CurrentMenu("varmenu")) {
@@ -244,12 +287,12 @@ void update_menu() {
 		menu.Title("Images");
 		menu.Subtitle("Image showcase");
 
-		for (auto handle : textureHandles) {
-			fs::path p(std::get<0>(handle));
+		for (auto texture : g_textures) {
+			fs::path p(texture.Filename);
 			std::vector<std::string> extras;
-			extras.push_back(menu.ImagePrefix + std::to_string(std::get<1>(handle)) + 
-							 "W" + std::to_string(std::get<2>(handle)) +
-							 "H" + std::to_string(std::get<3>(handle)));
+			extras.push_back(menu.ImagePrefix + std::to_string(texture.Handle) + 
+							 "W" + std::to_string(texture.Width) +
+							 "H" + std::to_string(texture.Height));
 			extras.push_back(p.filename().string());
 			menu.OptionPlus(p.filename().string(), extras, nullptr, nullptr, nullptr, "Image");
 		}
@@ -278,10 +321,7 @@ void update_game() {
 	/* Whatever happens normally in your script! */
 }
 
-inline bool exists(const std::string& name) {
-	struct stat buffer;
-	return (stat(name.c_str(), &buffer) == 0);
-}
+
 
 void main() {
 	logger.Write("Script started");
