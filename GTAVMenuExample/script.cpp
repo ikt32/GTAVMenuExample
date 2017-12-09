@@ -172,7 +172,7 @@ void update_menu() {
 
 		// This is a normal option. It'll return true when "select" is presed.
 		if (menu.Option("Click me!", { "This will log something to " + Paths::GetModuleNameWithoutExtension() + ".log" })) {
-			showNotification("Check the logfile!", &prevNotification);
+			showNotification("Check the log file!", &prevNotification);
 			logger.Write("\"Click me!\" was selected!");
 		}
 
@@ -185,7 +185,7 @@ void update_menu() {
 		// Showing static information is also possible if a string vector only contains one element.
 		int nothing = 0;
 		menu.StringArray("Version", { DISPLAY_VERSION }, nothing, 
-						 { "Thanks for checking out this menu!", "-ikt",  eGameVersionToString(getGameVersion())});
+						 { "Thanks for checking out this menu!", "Author: ikt",  "Game version: " + eGameVersionToString(getGameVersion())});
 	}
 
 	// Any submenus can have any titles. They should only need to match
@@ -209,12 +209,11 @@ void update_menu() {
 		// Some extra information can be shown on the right of the the menu.
 		std::vector<std::string> extraInfo = {
 			"OptionPlus",
-			"This box supports images, in-game sprites and texts. "
-			"Longer texts can be used without problems, this box should split the lines "
-			"by itself. As with the details, a new vector element inserts a newline.",
-			"See?"
+			"This box supports images, in-game sprites and texts. ",
+			"Longer texts can be used without problems, this box splits the lines "
+			"by itself. As with the details, a new vector element inserts a newline."
 		};
-		menu.OptionPlus("OptionPlus", extraInfo, nullptr, std::bind(onRight), std::bind(onLeft), "OptionPlus",
+		menu.OptionPlus("OptionPlus", extraInfo, nullptr, std::bind(onRight), std::bind(onLeft), "OptionPlus extras",
 		{ "This box also manages string splitting for width." });
 	}
 
@@ -239,7 +238,7 @@ void update_menu() {
 		menu.MenuOption("Custom background 2", "title_pngmenu2", { "External textures as background. Colored footer." });
 
 		menu.MenuOption("Long title text", "longtitlemenu",
-		{ "Automatically fit and resize long titles. Works for up to 2 lines of text (after processing)." });
+		{ "Automatically fit and resize long titles. Works for up to 2 lines of text after processing." });
 	}
 
 	if (menu.CurrentMenu("title_lscmenu")) {
@@ -278,7 +277,7 @@ void update_menu() {
 				"seashark" + " " +
 				"W" + std::to_string(512) +
 				"H" + std::to_string(256));
-			menu.OptionPlus("Game texture", extras, nullptr, nullptr, nullptr, "Sprite");
+			menu.OptionPlus("Game texture", extras, nullptr, nullptr, nullptr, "Sprite", { "OptionPlus box with sprite." });
 		}
 
 		for (auto texture : g_textures) {
@@ -288,7 +287,7 @@ void update_menu() {
 							 "W" + std::to_string(texture.Width) +
 							 "H" + std::to_string(texture.Height));
 			extras.push_back(p.filename().string());
-			menu.OptionPlus(p.filename().string(), extras, nullptr, nullptr, nullptr, "Image");
+			menu.OptionPlus(p.filename().string(), extras, nullptr, nullptr, nullptr, "Image", { "OptionPlus box with custom texture." });
 		}
 	}
 

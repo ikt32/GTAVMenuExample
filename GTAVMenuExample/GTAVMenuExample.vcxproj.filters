@@ -14,19 +14,25 @@
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GTAVMenuBase\menu.cpp">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GTAVMenuBase\menucontrols.cpp">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GTAVMenuBase\menukeyboard.cpp">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GTAVMenuBase\menuutils.cpp">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClCompile>
     <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GTAVMenuBase\Scaleform.cpp">
+      <Filter>MenuBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\GTAVMenuBase\InstructionalButton.cpp">
+      <Filter>MenuBase</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,30 +63,36 @@
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GTAVMenuBase\menu.h">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GTAVMenuBase\menucontrols.h">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GTAVMenuBase\menukeyboard.h">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GTAVMenuBase\menuutils.h">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
     </ClInclude>
     <ClInclude Include="..\..\GTAVMenuBase\menusettings.h">
-      <Filter>Menu</Filter>
+      <Filter>MenuBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GTAVMenuBase\Scaleform.h">
+      <Filter>MenuBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\GTAVMenuBase\InstructionalButton.h">
+      <Filter>MenuBase</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Filter Include="Menu">
-      <UniqueIdentifier>{26d64db9-1573-4132-9638-76079dc911c5}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Util">
       <UniqueIdentifier>{2d981cd8-6f7d-42dd-bf15-44aebcda936b}</UniqueIdentifier>
     </Filter>
     <Filter Include="SDK">
       <UniqueIdentifier>{01012e73-37b7-4874-b66a-9390e9a83264}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MenuBase">
+      <UniqueIdentifier>{26d64db9-1573-4132-9638-76079dc911c5}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
