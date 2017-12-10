@@ -28,12 +28,6 @@
     <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp">
       <Filter>MenuBase</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\Scaleform.cpp">
-      <Filter>MenuBase</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\InstructionalButton.cpp">
-      <Filter>MenuBase</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="script.h" />

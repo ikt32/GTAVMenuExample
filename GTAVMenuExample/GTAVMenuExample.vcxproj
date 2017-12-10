@@ -152,13 +152,11 @@
     </BuildLog>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\GTAVMenuBase\InstructionalButton.cpp" />
     <ClCompile Include="..\..\GTAVMenuBase\menu.cpp" />
     <ClCompile Include="..\..\GTAVMenuBase\menucontrols.cpp" />
     <ClCompile Include="..\..\GTAVMenuBase\menukeyboard.cpp" />
     <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp" />
     <ClCompile Include="..\..\GTAVMenuBase\menuutils.cpp" />
-    <ClCompile Include="..\..\GTAVMenuBase\Scaleform.cpp" />
     <ClCompile Include="keyboard.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="script.cpp" />
