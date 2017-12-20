@@ -13,6 +13,8 @@ http://dev-c.com
 #include "..\..\ScriptHookV_SDK\inc\main.h"
 #include <string>
 
+#define DISPLAY_VERSION "v1.0.0"
+
 const std::string modDir  = "\\GTAVMenuExample";
 
 void ScriptMain();
