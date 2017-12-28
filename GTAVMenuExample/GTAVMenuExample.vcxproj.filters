@@ -28,6 +28,7 @@
     <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp">
       <Filter>MenuBase</Filter>
     </ClCompile>
+    <ClCompile Include="ScriptMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="script.h" />

@@ -45,3 +45,9 @@ bool GetIMGDimensions(std::string file, int *width, int *height);
 
 bool GetPNGDimensions(std::string file, int *width, int *height);
 bool GetJPGDimensions(std::string file, int *width, int *height);
+
+
+inline bool exists(const std::string& name) {
+    struct stat buffer;
+    return stat(name.c_str(), &buffer) == 0;
+}
