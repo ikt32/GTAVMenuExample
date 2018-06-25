@@ -2,6 +2,7 @@
  * This file is an example implementation of the menu system.
  */
 #include "script.h"
+#include <inc/natives.h>
 
 // You'll only need to include <menu.h> to start using it,
 // after setting paths up properly.

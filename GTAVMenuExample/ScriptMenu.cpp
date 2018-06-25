@@ -6,9 +6,16 @@
  */
 #include "script.h"
 
+ // This include works from C++17 onwards, which is for filesystem access.
+ // I use it for demoing images, so if you use boost or some other way to
+ // explore folders, no need for this.
+#include <experimental/filesystem>
+
+#include <inc/natives.h>
+
 // You'll only need to include <menu.h> to start using it,
 // after setting paths up properly.
-#include "menu.h"
+#include <menu.h>
 
  // You can ignore these includes as they're only used to resolve
  // paths, log things to a file or to provide nice wrappers for natives.
@@ -17,10 +24,6 @@
 #include "Util/Logger.hpp"
 #include "Util/Versions.h"
 
-// This include works from C++17 onwards, which is for filesystem access.
-// I use it for demoing images, so if you use boost or some other way to
-// explore folders, no need for this.
-#include <experimental/filesystem>
 namespace fs = std::experimental::filesystem;
 
 // For demonstration purposes of image handling

@@ -1,7 +1,7 @@
 #pragma once
-
 #include <string>
 #include <vector>
+#include <inc/types.h>
 
 struct Color {
 	int R;

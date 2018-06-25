@@ -1,9 +1,11 @@
 #define NOMINMAX
-#include "../../../ScriptHookV_SDK/inc/natives.h"
 #include "Util.hpp"
+
 #include <algorithm>
 #include <fstream>
 #include <experimental/filesystem>
+
+#include <inc/natives.h>
 
 namespace fs = std::experimental::filesystem;
 
