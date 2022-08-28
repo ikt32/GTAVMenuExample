@@ -1,82 +1,74 @@
-/*
- * This file is an example implementation of the menu system.
- */
-#include "script.h"
-#include <inc/natives.h>
-
-// You'll only need to include <menu.h> to start using it,
-// after setting paths up properly.
-#include <menu.h>
-
-// You can ignore these includes as they're only used to resolve
-// paths, log things to a file or to provide nice wrappers for natives.
-#include "Util/Paths.h"
-#include "Util/Util.hpp"
+#include "Script.hpp"
+#include "MenuTexture.hpp"
+#include "ScriptMenu.hpp"
 #include "Util/Logger.hpp"
+#include "Util/Paths.hpp"
+#include "Util/UI.hpp"
 
-int textureBgId;
-int textureBgId2;
+#include <inc/main.h>
 
-NativeMenu::Menu menu;
-std::string settingsMenuFile;
+namespace {
+    std::shared_ptr<CMenuExampleScript> coreScript;
+    std::unique_ptr<CScriptMenu<CMenuExampleScript>> scriptMenu;
 
-Player player;
-Ped playerPed;
-
-/*
- * The settings may be read multiple times if needed.
- */
-void init() {
-	menu.ReadSettings();
+    bool initialized = false;
 }
 
-void update_game() {
-	/* 
-	 * Whatever happens normally in your script! 
-	 * For new, let's just update the player ped.
-	 */
-    player = PLAYER::PLAYER_ID();
-    playerPed = PLAYER::PLAYER_PED_ID();
+// These functions are only called in Script.cpp so don't need to be exposed.
+namespace MenuExample {
+    void scriptInit();
+    void scriptTick();
 }
 
-void main() {
-	logger.Write("Script started");
+// ScriptHookV calls ScriptMain when loading a save,
+// so it can happen multiple times in a game session.
+void MenuExample::ScriptMain() {
+    // This check exists to prevent global objects from being
+    // initialized multiple times.
+    if (!initialized) {
+        LOG(INFO, "Script started");
+        scriptInit();
+        initialized = true;
+    }
+    else {
+        LOG(INFO, "Script restarted");
+    }
 
-	// Check the paths on runtime, though this could also be hardcoded with a relative path.
-	settingsMenuFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\settings_menu.ini";
-	menu.SetFiles(settingsMenuFile);
-	logger.Write("Loading " + settingsMenuFile);
-
-	// Create the custom background texture. It's required to manually check if the file exists, otherwise ScriptHookV crashes!
-	std::string textureBgFile = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img\\custom_background.png";
-	if (exists(textureBgFile)) {
-		textureBgId = createTexture(textureBgFile.c_str());
-	}
-	else {
-		logger.Write("ERROR: " + textureBgFile + " does not exist.");
-	}
-	std::string textureBg2File = Paths::GetModuleFolder(Paths::GetOurModuleHandle()) + modDir + "\\img\\custom_background2.png";
-	if (exists(textureBg2File)) {
-		textureBgId2 = createTexture(textureBg2File.c_str());
-	}
-	else {
-		logger.Write("ERROR: " + textureBg2File + " does not exist.");
-	}
-
-	// Register callbacks for menu entry and exit.
-	menu.RegisterOnMain(std::bind(onMain));
-	menu.RegisterOnExit(std::bind(onExit));
-
-	init();
-
-	while (true) {
-		update_game();
-		update_menu();
-		WAIT(0);
-	}
+    scriptTick();
 }
 
-void ScriptMain() {
-	srand(GetTickCount());
-	main();
+void MenuExample::scriptInit() {
+    const auto settingsMenuPath = Paths::GetModPath() / "settings_menu.ini";
+
+    coreScript = std::make_shared<CMenuExampleScript>();
+
+    // The menu being initialized. Note the passed settings,
+    // the onInit and onExit lambdas and finally BuildMenu being called.
+    scriptMenu = std::make_unique<CScriptMenu<CMenuExampleScript>>(settingsMenuPath.string(),
+        []() {
+            LOG(INFO, "Menu opened");
+            // When the menu is opened, functions can be called.
+            // In this case, the images in the example folder are refreshed.
+            MenuTexture::UpdateTextures();
+        },
+        []() {
+            LOG(INFO, "Menu closed");
+            // When the menu is closed, functions can be called.
+            // In this case, a notification is shown.
+            UI::Notify("Menu was closed");
+        },
+        // The menu is built and submenus are passed into the CScriptMenu object.
+        // See MenuExampleMenu.cpp for the actual implementation.
+        BuildMenu()
+    );
+}
+
+// This function starts the infinite loop that updates the script instance and menu, every game tick.
+// It keeps running forever, until ScriptHookV restarts or stops the script.
+void MenuExample::scriptTick() {
+    while (true) {
+        coreScript->Tick();
+        scriptMenu->Tick(*coreScript);
+        WAIT(0);
+    }
 }

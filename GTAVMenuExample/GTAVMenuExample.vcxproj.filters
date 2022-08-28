@@ -1,10 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <ClCompile Include="script.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="keyboard.cpp" />
-    <ClCompile Include="Util\Util.cpp">
+    <ClCompile Include="Script.cpp" />
+    <ClCompile Include="DllMain.cpp" />
+    <ClCompile Include="Util\UI.cpp">
       <Filter>Util</Filter>
     </ClCompile>
     <ClCompile Include="Util\Paths.cpp">
@@ -13,81 +12,129 @@
     <ClCompile Include="Util\Logger.cpp">
       <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menu.cpp">
-      <Filter>MenuBase</Filter>
+    <ClCompile Include="MenuExampleMenu.cpp" />
+    <ClCompile Include="MenuExampleScript.cpp" />
+    <ClCompile Include="MenuTexture.cpp" />
+    <ClCompile Include="ImageDimensions.cpp">
+      <Filter>Util</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menucontrols.cpp">
-      <Filter>MenuBase</Filter>
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menu.cpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menukeyboard.cpp">
-      <Filter>MenuBase</Filter>
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menucontrols.cpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menuutils.cpp">
-      <Filter>MenuBase</Filter>
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menukeyboard.cpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\GTAVMenuBase\menusettings.cpp">
-      <Filter>MenuBase</Filter>
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menumemutils.cpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClCompile>
-    <ClCompile Include="ScriptMenu.cpp" />
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menusettings.cpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\thirdparty\GTAVMenuBase\menuutils.cpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="script.h" />
-    <ClInclude Include="..\..\ScriptHookV_SDK\inc\enums.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ScriptHookV_SDK\inc\main.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ScriptHookV_SDK\inc\natives.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\ScriptHookV_SDK\inc\types.h">
-      <Filter>SDK</Filter>
-    </ClInclude>
-    <ClInclude Include="keyboard.h" />
-    <ClInclude Include="Util\Util.hpp">
+    <ClInclude Include="Script.hpp" />
+    <ClInclude Include="Util\UI.hpp">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="Util\Paths.h">
-      <Filter>Util</Filter>
-    </ClInclude>
-    <ClInclude Include="Util\Versions.h">
+    <ClInclude Include="Util\Paths.hpp">
       <Filter>Util</Filter>
     </ClInclude>
     <ClInclude Include="Util\Logger.hpp">
       <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menu.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="ScriptMenu.hpp" />
+    <ClInclude Include="Constants.hpp" />
+    <ClInclude Include="MenuExampleScript.hpp" />
+    <ClInclude Include="MenuTexture.hpp" />
+    <ClInclude Include="ImageDimensions.hpp">
+      <Filter>Util</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menucontrols.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\InstructionalButton.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menukeyboard.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menu.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menuutils.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menucontrols.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\menusettings.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menukeyboard.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\Scaleform.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menusettings.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\GTAVMenuBase\InstructionalButton.h">
-      <Filter>MenuBase</Filter>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menuutils.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\Scaleform.h">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\GTAVMenuBase\menumemutils.hpp">
+      <Filter>ThirdParty\GTAVMenuBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\ScriptHookV_SDK\inc\enums.h">
+      <Filter>ThirdParty\ScriptHookV\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\ScriptHookV_SDK\inc\main.h">
+      <Filter>ThirdParty\ScriptHookV\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\ScriptHookV_SDK\inc\nativeCaller.h">
+      <Filter>ThirdParty\ScriptHookV\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\ScriptHookV_SDK\inc\natives.h">
+      <Filter>ThirdParty\ScriptHookV\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\ScriptHookV_SDK\inc\types.h">
+      <Filter>ThirdParty\ScriptHookV\inc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\thirdparty\simpleini\SimpleIni.h">
+      <Filter>ThirdParty\simpleini</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Util">
       <UniqueIdentifier>{2d981cd8-6f7d-42dd-bf15-44aebcda936b}</UniqueIdentifier>
     </Filter>
-    <Filter Include="SDK">
+    <Filter Include="ThirdParty">
+      <UniqueIdentifier>{12bfb7cd-0fb3-4dc1-9bdf-2f6b97605338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\ScriptHookV">
       <UniqueIdentifier>{01012e73-37b7-4874-b66a-9390e9a83264}</UniqueIdentifier>
     </Filter>
-    <Filter Include="MenuBase">
+    <Filter Include="ThirdParty\GTAVMenuBase">
       <UniqueIdentifier>{26d64db9-1573-4132-9638-76079dc911c5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="ThirdParty\ScriptHookV\inc">
+      <UniqueIdentifier>{5a4685d5-4339-4375-a79e-f3a511b574a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\ScriptHookV\lib">
+      <UniqueIdentifier>{f8c9a988-6205-4f4d-876e-0ea2849a9866}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ThirdParty\simpleini">
+      <UniqueIdentifier>{6e54d8dd-e89f-4fb9-8ecc-af8f4e3bd69a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Info">
+      <UniqueIdentifier>{b456ee42-7020-4fb5-8bea-49dbdfee208a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="..\thirdparty\ScriptHookV_SDK\lib\ScriptHookV.lib">
+      <Filter>ThirdParty\ScriptHookV\lib</Filter>
+    </Library>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Filter>Info</Filter>
+    </None>
+    <None Include="..\README.md">
+      <Filter>Info</Filter>
+    </None>
   </ItemGroup>
 </Project>

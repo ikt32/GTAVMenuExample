@@ -1,56 +1,68 @@
-#include <Windows.h>
-#include <fstream>
-#include <iomanip>
-
 #include "Logger.hpp"
 
-Logger::Logger() {}
+#include <chrono>
+#include <format>
+#include <fstream>
+#include <vector>
+
+Logger g_Logger;
+
+namespace {
+    constexpr const char* const levelStrings[] = {
+        " DEBUG ",
+        " INFO  ",
+        "WARNING",
+        " ERROR ",
+        " FATAL "
+    };
+}
+
+Logger::Logger() = default;
+
+void Logger::SetFile(const std::string& fileName) {
+    file = fileName;
+}
+
+void Logger::SetMinLevel(LogLevel level) {
+    minLevel = level;
+}
 
 void Logger::Clear() const {
-	if (file == "") {
-		std::ofstream logFile(bakFile, std::ios_base::out | std::ios_base::app);
-		SYSTEMTIME currTimeLog;
-		GetLocalTime(&currTimeLog);
-		logFile << "[" <<
-			std::setw(2) << std::setfill('0') << currTimeLog.wHour << ":" <<
-			std::setw(2) << std::setfill('0') << currTimeLog.wMinute << ":" <<
-			std::setw(2) << std::setfill('0') << currTimeLog.wSecond << "." <<
-			std::setw(3) << std::setfill('0') << currTimeLog.wMilliseconds << "] " <<
-			"ERROR: Clear on invalid log file" << "\n";
-	}
-	std::ofstream logFile;
-	logFile.open(file, std::ofstream::out | std::ofstream::trunc);
-	logFile.close();
+    std::ofstream logFile(file, std::ofstream::out | std::ofstream::trunc);
+    logFile.close();
+    if (logFile.fail())
+        mError = true;
 }
 
-void Logger::Write(const std::string& text) const {
-	if (file == "") {
-		std::ofstream logFile(bakFile, std::ios_base::out | std::ios_base::app);
-		SYSTEMTIME currTimeLog;
-		GetLocalTime(&currTimeLog);
-		// [HH:MM:SS.mmm] 
-		logFile << "[" <<
-			std::setw(2) << std::setfill('0') << currTimeLog.wHour << ":" <<
-			std::setw(2) << std::setfill('0') << currTimeLog.wMinute << ":" <<
-			std::setw(2) << std::setfill('0') << currTimeLog.wSecond << "." <<
-			std::setw(3) << std::setfill('0') << currTimeLog.wMilliseconds << "] " <<
-			"ERROR: Write to invalid log file: \n" << 
-			"               " << text << "\n";
-	}
-	std::ofstream logFile(file, std::ios_base::out | std::ios_base::app);
-	SYSTEMTIME currTimeLog;
-	GetLocalTime(&currTimeLog);
-	logFile << "[" <<
-	           std::setw(2) << std::setfill('0') << currTimeLog.wHour << ":" <<
-	           std::setw(2) << std::setfill('0') << currTimeLog.wMinute << ":" <<
-	           std::setw(2) << std::setfill('0') << currTimeLog.wSecond << "." <<
-	           std::setw(3) << std::setfill('0') << currTimeLog.wMilliseconds << "] " <<
-	           text << "\n";
+bool Logger::Error() {
+    return mError;
 }
 
-void Logger::SetFile(const std::string &fileName) {
-	file = fileName;
+void Logger::ClearError() {
+    mError = false;
 }
 
-// Everything's gonna use this instance.
-Logger logger;
+void Logger::write(LogLevel level, const std::string& txt) const {
+#ifndef _DEBUG
+    if (level < minLevel) return;
+#endif
+    std::ofstream logFile(file, std::ios_base::out | std::ios_base::app);
+
+    const auto now = std::chrono::system_clock::now().time_since_epoch();
+    logFile << std::format("[{:%H:%M:%S}] [{}] {}\n",
+        std::chrono::duration_cast<std::chrono::milliseconds>(now),
+        levelText(level),
+        txt);
+
+    logFile.close();
+    if (logFile.fail())
+        mError = true;
+}
+
+std::string Logger::levelText(LogLevel level) const {
+    if (level > 4 || level < 0) {
+        return "  UNK  ";
+    }
+
+    return levelStrings[level];
+}
