@@ -148,6 +148,7 @@
     <Library Include="..\thirdparty\ScriptHookV_SDK\lib\ScriptHookV.lib" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\CHANGELOG.md" />
     <None Include="..\LICENSE" />
     <None Include="..\README.md" />
   </ItemGroup>

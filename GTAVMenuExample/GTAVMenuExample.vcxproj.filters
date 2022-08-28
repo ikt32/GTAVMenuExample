@@ -136,5 +136,8 @@
     <None Include="..\README.md">
       <Filter>Info</Filter>
     </None>
+    <None Include="..\CHANGELOG.md">
+      <Filter>Info</Filter>
+    </None>
   </ItemGroup>
 </Project>
