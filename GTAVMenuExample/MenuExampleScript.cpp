@@ -18,8 +18,8 @@ std::string CMenuExampleScript::GetPlayerVehicleName() {
     Vehicle playerVehicle = PED::GET_VEHICLE_PED_IS_IN(PLAYER::PLAYER_PED_ID(), false);
     if (ENTITY::DOES_ENTITY_EXIST(playerVehicle)) {
         Hash model = ENTITY::GET_ENTITY_MODEL(playerVehicle);
-        std::string makeName = HUD::_GET_LABEL_TEXT(VEHICLE::_GET_MAKE_NAME_FROM_VEHICLE_MODEL(model));
-        std::string modelName = HUD::_GET_LABEL_TEXT(VEHICLE::GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(model));
+        std::string makeName = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(VEHICLE::GET_MAKE_NAME_FROM_VEHICLE_MODEL(model));
+        std::string modelName = HUD::GET_FILENAME_FOR_AUDIO_CONVERSATION(VEHICLE::GET_DISPLAY_NAME_FROM_VEHICLE_MODEL(model));
         return std::format("{} {}", makeName, modelName);
     }
     else {
