@@ -1,6 +1,6 @@
 # GTAVMenuExample
 
-[![Build status](https://ci.appveyor.com/api/projects/status/2ttmwbmmt1vxamoi?svg=true)](https://ci.appveyor.com/project/E66666666/gtavmenuexample)
+[![Build status](https://github.com/E66666666/GTAVMenuExample/actions/workflows/msbuild.yml/badge.svg)](https://github.com/E66666666/GTAVMenuExample/actions)
 
 Example script of how to use [GTAVMenuBase](https://github.com/E66666666/GTAVMenuBase).
 
