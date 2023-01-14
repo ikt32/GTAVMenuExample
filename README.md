@@ -33,12 +33,12 @@ Once cloned, the project should just build with
 
 v2.0.0 of the example is completely rewritten to how my newer scripts use it. A few general concepts:
 
-* Generally, things should be more neatly divided and be less of a major clusterfuck.
-* `CScriptMenu` wraps the `NativeMenu::Menu` and calls boilerplate stuff.
+* Generally, things should be more neatly divided and less of a complete mess.
+* `CScriptMenu` wraps the `NativeMenu::Menu` and calls boilerplate menu code to initialize and check controls.
 * `CScriptMenu::CSubmenu` represents a single "menu page".
-* There is a "script instance" object that can be passed for the menu to directly operate on.
+* There is a "script instance" object that can be passed for the menu page to use.
 
-I'd recommend the following order to get a general grasp of how this thing works:
+I recommend the following order to get a general grasp of how this example works:
 
 1. `DllMain.cpp` - Dll entrypoint and some setup stuff
 2. `Script.cpp/hpp` - Script initialization
