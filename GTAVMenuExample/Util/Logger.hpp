@@ -26,7 +26,7 @@ public:
     template <typename... Args>
     void Write(LogLevel level, std::string_view fmt, Args&&... args) const {
         try {
-            write(level, std::vformat(fmt, std::make_format_args(std::forward<Args>(args)...)));
+            write(level, std::vformat(fmt, std::make_format_args(args...)));
         }
         catch (const std::exception& ex) {
             write(ERROR, std::format("Failed to format: [{}], {}", fmt, ex.what()));
